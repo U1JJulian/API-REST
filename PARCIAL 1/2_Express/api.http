@@ -1,16 +1,17 @@
-### Para recuperar informacion
+### Para obtener informacion
 GET http://localhost:3000/
 
-### Para mandar un json 
+### Para crear
 POST http://localhost:3000/
 Content-Type: application/json, "Accept": "application/json"
 
 {
-  "text": "Hola mundo con POST!"
+  "fruta": "Platano"
 }
 
 ### Para editar 
-PUT http://localhost:3000/
+PUT http://localhost:3000/Platano/Banana
+
 
 ### Para eliminar
-DELETE  http://localhost:3000/
+DELETE  http://localhost:3000/Manzana
