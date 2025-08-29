@@ -4,11 +4,22 @@ const PORT = 3000
 
 let frutas = ["Manzana", "Pera", "Uva", "Sandia", "Naranja", "Limon"]
 
+const verificarJSON = () => {
+    return (req, res, next) => {
+        if (req.headers['content-type'] !== 'application/json, "Accept": "application/json"') {
+            res.status(400).send('Servidor solo acepta Json')
+        }
+        else {
+            next()
+        }
+    }
+}
+
 app.get('/', (req, res) => {
     res.send(frutas.join(", "));
 });
 
-app.post('/', (req, res) => {
+app.post('/',verificarJSON(), (req, res) => {
     let body = '';
 
     req.on('data', chunk => {
@@ -35,7 +46,7 @@ app.put('/:original/:nueva', (req, res) => {
     if (posicion !== -1) {
         frutas.splice(posicion, 1, nueva); //editamos la posicion
         res.status(201).send(`Se edito correctamente ${original} por ${nueva}`);
-    }else{
+    } else {
         res.status(404).send(`No se encontro la fruta ${original}`);
     }
 
@@ -44,10 +55,10 @@ app.put('/:original/:nueva', (req, res) => {
 app.delete('/:fruta', (req, res) => {
     const original = req.params.fruta;
     let posicion = frutas.indexOf(original);
-    if(posicion !== -1){
+    if (posicion !== -1) {
         frutas.splice(posicion, 1);
-          res.status(201).send(`Se elimino la fruta ${original}`);
-    }else{
+        res.status(201).send(`Se elimino la fruta ${original}`);
+    } else {
         res.status(404).send(`No se encontro la fruta ${original}`);
     }
 });
