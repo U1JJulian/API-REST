@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probar error de CORS</title>
+</head>
+<!--Las etiqueta <form> <link> <script> esta excentas de la politica SOP -->
+<form target="respuesta" method="GET" action="http://localhost:3000/frutas"> <!--Peticion con formulario-->
+<button type="submit">CORS_Form</button>
+</form>
+<iframe name="respuesta"></iframe>
+<br>
+<button id="btnCors">CORS</button>
+<body>
+  <script>
+    //Las peticiones Asincronas FECTH, XML, HTTP, Rquest con JQuery Axios deben cumplir SOP
+    document.getElementById("btnCors").addEventListener('click', () =>{
+    fetch("http://localhost:3000/frutas") 
+      .then(res => res.text())
+      .then(data => console.log("Respuesta:", data))
+      .catch(err => console.error("Error CORS:", err));
+    })
+  </script>
+</body>
+</html>
