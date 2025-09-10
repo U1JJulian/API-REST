@@ -1,0 +1,139 @@
+ public IActionResult Phar()
+ {
+     return View();
+ }
+ [HttpPost]
+ public IActionResult Phar(IFormFile archivo, string textoOCR)
+ {
+     var tabla = new TablaDatos
+     {
+         NombresColumnas = new List<string>
+ {
+     "Month", "Revenue_FY2024", "Revenue_FY2025",
+     "Cars_1X", "Trucks_2X", "Trucks_3X", "Trucks_4X", "Trucks_5X",
+     "Trucks_6X", "Mobile_Homes", "Wide_Load", "Special_Cross", "Month_Total"
+ },
+         Columnas = new Dictionary<string, List<DatoConCoordenadas>>()
+     };
+
+     foreach (var nombre in tabla.NombresColumnas)
+         tabla.Columnas[nombre] = new List<DatoConCoordenadas>();
+
+     string[] mesesValidos = { "OCTOBER", "NOVEMBER", "DECEMBER", "JANUARY", "FEBRUARY", "MARCH" };
+
+     // Diccionario para combinar datos de ambas páginas
+     var datosPorMes = new Dictionary<string, Dictionary<string, string>>();
+
+     using (var pdf = PdfDocument.Open(archivo.OpenReadStream()))
+     {
+         foreach (var page in pdf.GetPages())
+         {
+             var palabras = page.GetWords();
+             var lineasAgrupadas = AgruparLineas(palabras);
+
+             foreach (var linea in lineasAgrupadas)
+             {
+                 var palabrasOrdenadas = linea.OrderBy(p => p.BoundingBox.Left).ToList();
+                 var textos = palabrasOrdenadas.Select(p => p.Text.Trim().ToUpper()).ToList();
+
+                 // Página 8: tipo de eje (tiene 11 columnas)
+                 if (textos.Count >= 11 && mesesValidos.Contains(textos[0]))
+                 {
+                     string mes = textos[0];
+
+                     if (!datosPorMes.ContainsKey(mes))
+                         datosPorMes[mes] = new Dictionary<string, string>();
+
+                     datosPorMes[mes]["Cars_1X"] = Limpiar(textos[1]);
+                     datosPorMes[mes]["Trucks_2X"] = Limpiar(textos[2]);
+                     datosPorMes[mes]["Trucks_3X"] = Limpiar(textos[3]);
+                     datosPorMes[mes]["Trucks_4X"] = Limpiar(textos[4]);
+                     datosPorMes[mes]["Trucks_5X"] = Limpiar(textos[5]);
+                     datosPorMes[mes]["Trucks_6X"] = Limpiar(textos[6]);
+                     datosPorMes[mes]["Mobile_Homes"] = Limpiar(textos[7]);
+                     datosPorMes[mes]["Wide_Load"] = Limpiar(textos[8]);
+                     datosPorMes[mes]["Special_Cross"] = Limpiar(textos[9]);
+                     datosPorMes[mes]["Month_Total"] = Limpiar(textos[10]);
+                 }
+
+                 // Página 9: ingresos (5 columnas)
+                 if (textos.Count >= 5 && textos[1].StartsWith("$")  &&  mesesValidos.Contains(textos[0]))
+                 {
+                     string mes = textos[0];
+
+                     if (!datosPorMes.ContainsKey(mes))
+                         datosPorMes[mes] = new Dictionary<string, string>();
+
+                     datosPorMes[mes]["Revenue_FY2024"] = Limpiar(textos[2]);
+                     datosPorMes[mes]["Revenue_FY2025"] = Limpiar(textos[1]);
+                    
+                 }
+             }
+         }
+     }
+
+     // Ahora agregamos los datos por mes en orden fijo
+     foreach (var mes in mesesValidos)
+     {
+         if (datosPorMes.ContainsKey(mes))
+         {
+             var datos = datosPorMes[mes];
+
+             tabla.Columnas["Month"].Add(NuevoDato(mes));
+             tabla.Columnas["Revenue_FY2024"].Add(NuevoDato(datos.GetValueOrDefault("Revenue_FY2024", "--")));
+             tabla.Columnas["Revenue_FY2025"].Add(NuevoDato(datos.GetValueOrDefault("Revenue_FY2025", "--")));
+             tabla.Columnas["Cars_1X"].Add(NuevoDato(datos.GetValueOrDefault("Cars_1X", "--")));
+             tabla.Columnas["Trucks_2X"].Add(NuevoDato(datos.GetValueOrDefault("Trucks_2X", "--")));
+             tabla.Columnas["Trucks_3X"].Add(NuevoDato(datos.GetValueOrDefault("Trucks_3X", "--")));
+             tabla.Columnas["Trucks_4X"].Add(NuevoDato(datos.GetValueOrDefault("Trucks_4X", "--")));
+             tabla.Columnas["Trucks_5X"].Add(NuevoDato(datos.GetValueOrDefault("Trucks_5X", "--")));
+             tabla.Columnas["Trucks_6X"].Add(NuevoDato(datos.GetValueOrDefault("Trucks_6X", "--")));
+             tabla.Columnas["Mobile_Homes"].Add(NuevoDato(datos.GetValueOrDefault("Mobile_Homes", "--")));
+             tabla.Columnas["Wide_Load"].Add(NuevoDato(datos.GetValueOrDefault("Wide_Load", "--")));
+             tabla.Columnas["Special_Cross"].Add(NuevoDato(datos.GetValueOrDefault("Special_Cross", "--")));
+             tabla.Columnas["Month_Total"].Add(NuevoDato(datos.GetValueOrDefault("Month_Total", "--")));
+         }
+     }
+
+     ViewBag.Tabla = tabla;
+     return View();
+
+     // ------------------ Métodos auxiliares ------------------
+
+     DatoConCoordenadas NuevoDato(string valor)
+     {
+         return new DatoConCoordenadas
+         {
+             Valor = valor,
+             PosicionX = 0,
+             PosicionY = 0,
+             Caracteres = new List<CoordenadaCaracter>()
+         };
+     }
+
+     string Limpiar(string valor)
+     {
+         return valor.Replace("$", "").Replace(",", "").Replace("(", "-").Replace(")", "").Trim();
+     }
+
+     List<List<Word>> AgruparLineas(IEnumerable<Word> palabras)
+     {
+         var lineas = new List<List<Word>>();
+         foreach (var palabra in palabras.OrderByDescending(p => p.BoundingBox.Bottom))
+         {
+             bool añadida = false;
+             foreach (var linea in lineas)
+             {
+                 if (Math.Abs(linea[0].BoundingBox.Bottom - palabra.BoundingBox.Bottom) < 3)
+                 {
+                     linea.Add(palabra);
+                     añadida = true;
+                     break;
+                 }
+             }
+             if (!añadida)
+                 lineas.Add(new List<Word> { palabra });
+         }
+         return lineas;
+     }
+ }

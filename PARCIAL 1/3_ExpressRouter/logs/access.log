@@ -9,3 +9,5 @@
 ::1 - - [08/Sep/2025:13:49:58 +0000] "GET /frutas HTTP/1.1" 200 42 "http://127.0.0.1:5500/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
 ::1 - - [08/Sep/2025:13:50:13 +0000] "GET /frutas? HTTP/1.1" 200 42 "http://127.0.0.1:5500/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
 ::1 - - [08/Sep/2025:13:50:14 +0000] "GET /frutas HTTP/1.1" 200 42 "http://127.0.0.1:5500/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 Edg/140.0.0.0"
+::ffff:127.0.0.1 - - [09/Sep/2025:13:18:07 +0000] "GET /Frutas HTTP/1.1" 200 42 "-" "vscode-restclient"
+::1 - - [10/Sep/2025:14:31:43 +0000] "POST /usuario/ HTTP/1.1" 200 19 "-" "HTTPie"
