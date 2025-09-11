@@ -9,9 +9,6 @@ Content-Type: application/json, "Accept": "application/json"
   "fruta": "Platano"
 }
 
-
-
-
 ### Para el uso del middleware
 
 POST http://localhost:3000/

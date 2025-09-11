@@ -1,16 +1,22 @@
 import express from 'express'
-import routerFrutas from './rutas/frutas.js'
+import R_frutas from './rutas/frutas.js'
+import R_usuario from './rutas/usuario.js'
 import cors from 'cors'
 import morgan from 'morgan'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-
 import multer from 'multer'
 
+//Definimos rutas
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
+//Creamos la carpeta a almacenar archivos
+const folder = path.join(__dirname, '/archivos/');
+const upload = multer({dest:folder});
+
+//Definimos express y el puerto
 const app = express()
 const PORT = 3000
 
@@ -20,26 +26,16 @@ const accessLogStream = fs.createWriteStream(
   { flags: 'a' }
 )
 
-const folder = path.join(__dirname, '/archivos/');
-const upload = multer({dest:folder});
-
-// Middlewares
+//Middlewares
 app.use(cors())
 app.use(morgan('combined', { stream: accessLogStream }))
 
-//multer
+//Multer
 app.use(upload.single('archivo'));
-//app.use(upload.none());
 
-app.post('/usuario/', (req,res) => {
-  console.log(`Se recibio el archivo: ${req.file.originalname}`);
-  console.log(req.body);
-  console.log('Se recibio el formulario:' + JSON.stringify(req.body));
-  res.json(req.body);
-});
-
-// Rutas
-app.use('/frutas', routerFrutas)
+//Rutas
+app.use('/usuario', R_usuario)
+app.use('/frutas', R_frutas)
 
 // Servidor
 app.listen(PORT, () => {

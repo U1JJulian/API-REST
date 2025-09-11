@@ -1,8 +1,6 @@
 import express from 'express'
 const router = express.Router();
-
-
-let frutas = ["Manzana", "Pera", "Uva", "Sandia", "Naranja", "Limon"]
+import { obtenerFrutas, insertarFruta } from '../controller/frutasController.js';
 
 const verificarJSON = () => {
     return (req, res, next) => {
@@ -16,26 +14,11 @@ const verificarJSON = () => {
 }
 
 router.get('/', (req, res) => {
-    res.send(frutas.join(", "));
+    obtenerFrutas(req,res);
 });
 
 router.post('/',verificarJSON(), (req, res) => {
-    let body = '';
-
-    req.on('data', chunk => {
-        body += chunk.toString();
-    });
-
-    req.on('end', () => {
-
-        const data = JSON.parse(body);
-        frutas.push(`${data.fruta}`);
-
-        const mensaje = {
-            "mensaje": `Se agrego correctamente la fruta ${data.fruta}`
-        }
-        res.status(201).json(mensaje);
-    });
+    insertarFruta(req,res);
 });
 
 export default router; 
