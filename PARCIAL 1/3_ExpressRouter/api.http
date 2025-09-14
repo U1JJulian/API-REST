@@ -6,7 +6,7 @@ POST http://localhost:3000/Frutas
 Content-Type: application/json, "Accept": "application/json"
 
 {
-  "fruta": "Platano"
+  "fruta": "Manzana"
 }
 
 ### Para el uso del middleware
