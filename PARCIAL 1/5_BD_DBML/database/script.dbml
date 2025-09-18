@@ -1,0 +1,24 @@
+Table teams {
+  id int [pk, increment]
+  name varchar(100)
+  country varchar(50) // País del club
+  founded_year int
+}
+
+Table players {
+  id int [pk, increment]
+  name varchar(100)
+  nationality varchar(50) // País del jugador
+  position varchar(50)    // Portero, Defensa, Medio, Delantero
+  age int
+}
+
+Table player_history {
+  id int [pk, increment]
+  player_id int [ref: > players.id] // Jugador
+  team_id int [ref: > teams.id]     // Equipo
+  start_year int                    // Año en que se unió
+  end_year int                      // Año en que salió
+  position varchar(50)              // Posición jugada en ese club (opcional)
+  shirt_number int                  // Número que usaba (opcional)
+}
