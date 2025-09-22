@@ -1,0 +1,16 @@
+### Obtener la lista de futbolistas
+GET http://localhost:3000/futbolista
+
+### Insertar futbolista
+POST http://localhost:3000/futbolista
+Content-Type: application/json, "Accept": "application/json"
+
+{
+  "name": "Kylian Mbappé",
+  "nationality": "Francia",
+  "position": "Delantero",
+  "age": 26
+}
+
+### Obtener futbolista por id
+GET http://localhost:3000/futbolista/6

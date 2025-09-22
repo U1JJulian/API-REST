@@ -1,0 +1,16 @@
+{
+  "name": "api_futbolistas",
+  "version": "1.0.0",
+  "description": "API para obtener informacion de futbolistas",
+  "main": "index.js",
+    "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jose Julian Gonzalez Medrano",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mysql2": "^3.15.0"
+  }
+}
