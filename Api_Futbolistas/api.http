@@ -13,4 +13,39 @@ Content-Type: application/json, "Accept": "application/json"
 }
 
 ### Obtener futbolista por id
-GET http://localhost:3000/futbolista/6
+GET http://localhost:3000/futbolista/1
+
+### Error: body vacío
+POST http://localhost:3000/futbolista
+Content-Type: application/json, "Accept": "application/json"
+
+### Error: JSON malformado
+POST http://localhost:3000/futbolista
+Content-Type: application/json, "Accept": "application/json"
+
+{ "name": "Cristiano Ronaldo", "nationality": "Portugal", "position": "Delantero"}  // falta cierre 
+
+###
+
+### Error: falta campo obligatorio (sin "name")
+POST http://localhost:3000/futbolista
+Content-Type: application/json, "Accept": "application/json"
+
+{
+  "nationality": "Brasil",
+  "position": "Defensa",
+  "age": 25
+}
+
+###
+
+### Error: edad inválida (negativa)
+POST http://localhost:3000/futbolista
+Content-Type: application/json, "Accept": "application/json"
+
+{
+  "name": "Jugador Test",
+  "nationality": "Chile",
+  "position": "Mediocampista",
+  "age": -10
+}

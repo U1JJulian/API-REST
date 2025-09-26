@@ -29,6 +29,7 @@ export async function obtenerFutbolista(req, res) {
 }
 
 // Insertar un nuevo futbolista
+// Insertar un nuevo futbolista con validación
 export async function insertarFutbolista(req, res) {
   let body = "";
 
@@ -38,20 +39,45 @@ export async function insertarFutbolista(req, res) {
 
   req.on("end", async () => {
     try {
-      const data = JSON.parse(body);
+      // Verificar que el body no esté vacío
+      if (!body) {
+        return res.status(400).json({ error: "No se recibieron datos" });
+      }
+
+      let data;
+      try {
+        data = JSON.parse(body);
+      } catch (err) {
+        return res.status(400).json({ error: "Formato JSON inválido" });
+      }
+
       const { name, nationality, position, age } = data;
+
+      // Validaciones básicas
+      if (!name || typeof name !== "string" || name.trim() === "") {
+        return res.status(400).json({ error: "El nombre es obligatorio y debe ser un texto" });
+      }
+      if (!nationality || typeof nationality !== "string" || nationality.trim() === "") {
+        return res.status(400).json({ error: "La nacionalidad es obligatoria y debe ser un texto" });
+      }
+      if (!position || typeof position !== "string" || position.trim() === "") {
+        return res.status(400).json({ error: "La posición es obligatoria y debe ser un texto" });
+      }
+      if (!age || isNaN(age) || age <= 0) {
+        return res.status(400).json({ error: "La edad es obligatoria y debe ser un número mayor a 0" });
+      }
 
       // Insertamos en la tabla players
       const [result] = await pool.query(
         "INSERT INTO players (name, nationality, position, age) VALUES (?, ?, ?, ?)",
-        [name, nationality, position, age]
+        [name.trim(), nationality.trim(), position.trim(), age]
       );
 
-      res.json({
+      res.status(201).json({
         id: result.insertId,
-        name,
-        nationality,
-        position,
+        name: name.trim(),
+        nationality: nationality.trim(),
+        position: position.trim(),
         age
       });
 
@@ -62,11 +88,21 @@ export async function insertarFutbolista(req, res) {
   });
 }
 
-// Obtener un futbolista por ID
+
+
+// Obtener un futbolista por ID con validación
 export async function obtenerFutbolistaPorId(req, res) {
   try {
     const { id } = req.params;
-    const [rows] = await pool.query("SELECT * FROM players WHERE id = ?", [id]);
+
+    // Validar que id sea un número entero positivo
+    const numId = Number(id);
+
+    if (!Number.isInteger(numId) || numId <= 0) {
+      return res.status(400).json({ error: "El ID debe ser un número entero positivo" });
+    }
+
+    const [rows] = await pool.query("SELECT * FROM players WHERE id = ?", [numId]);
 
     if (rows.length === 0) {
       return res.status(404).json({ error: "Futbolista no encontrado" });
