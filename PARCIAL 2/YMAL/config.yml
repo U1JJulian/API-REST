@@ -1,0 +1,8 @@
+app:
+  name: MiAplicacion
+  autor: JJulian
+  version: "1.0.0"
+  features:
+    - login
+    - registro
+    - dashboard
