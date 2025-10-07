@@ -1,0 +1,2 @@
+### Para obtener informacion
+GET http://localhost:3000/hola
