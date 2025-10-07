@@ -21,8 +21,8 @@ router.get('/:id', (req, res) => {
     obtenerFutbolistaPorId(req,res);
 });
 
-router.post('/',verificarJSON(), (req, res) => {
-    insertarFutbolista(req,res);
+router.post('/',verificarJSON(), (req, res,next) => {
+    insertarFutbolista(req,res,next);
 });
 
 

@@ -30,14 +30,7 @@ export async function obtenerFutbolista(req, res) {
 
 // Insertar un nuevo futbolista
 // Insertar un nuevo futbolista con validación
-export async function insertarFutbolista(req, res) {
-  let body = "";
-
-  req.on("data", chunk => {
-    body += chunk.toString();
-  });
-
-  req.on("end", async () => {
+export async function insertarFutbolista(req, res, next) {
     try {
       // Verificar que el body no esté vacío
       if (!body) {
@@ -55,7 +48,7 @@ export async function insertarFutbolista(req, res) {
 
       // Validaciones básicas
       if (!name || typeof name !== "string" || name.trim() === "") {
-        return res.status(400).json({ error: "El nombre es obligatorio y debe ser un texto" });
+        return next(new Error("Esto es un mensaje de error"));
       }
       if (!nationality || typeof nationality !== "string" || nationality.trim() === "") {
         return res.status(400).json({ error: "La nacionalidad es obligatoria y debe ser un texto" });
@@ -82,10 +75,8 @@ export async function insertarFutbolista(req, res) {
       });
 
     } catch (err) {
-      console.error("Error al insertar futbolista:", err);
-      res.status(500).json({ error: "Error en el servidor" });
+      next(new Error("Esto es un mensaje de error"));
     }
-  });
 }
 
 
