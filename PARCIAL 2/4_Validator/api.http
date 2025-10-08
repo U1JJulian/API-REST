@@ -1,0 +1,33 @@
+### Para obtener informacion
+GET http://localhost:3000/Frutas
+
+### Para crear
+POST http://localhost:3000/Frutas
+Content-Type: application/json, "Accept": "application/json"
+
+{
+  "fruta": "Manzana"
+}
+### Para el manejador de errorres
+POST http://localhost:3000/Frutas
+Content-Type: application/json, "Accept": "application/json"
+
+{
+  "fruta": 1233
+}
+
+
+### Para el uso del middleware
+
+POST http://localhost:3000/
+Content-Type: application/json"
+
+{
+  "fruta": "Platano"
+}
+### Para editar 
+PUT http://localhost:3000/Platano/Banana
+
+
+### Para eliminar
+DELETE  http://localhost:3000/Manzana
