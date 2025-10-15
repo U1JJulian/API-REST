@@ -38,3 +38,4 @@
 ::ffff:127.0.0.1 - - [02/Oct/2025:13:39:45 +0000] "DELETE //Manzana HTTP/1.1" 404 150 "-" "vscode-restclient"
 ::ffff:127.0.0.1 - - [07/Oct/2025:01:56:00 +0000] "POST /Frutas HTTP/1.1" 500 64 "-" "vscode-restclient"
 ::ffff:127.0.0.1 - - [08/Oct/2025:13:48:20 +0000] "POST /Frutas HTTP/1.1" 400 237 "-" "vscode-restclient"
+::ffff:127.0.0.1 - - [09/Oct/2025:13:44:13 +0000] "POST /Frutas HTTP/1.1" 400 258 "-" "vscode-restclient"
