@@ -1,17 +1,42 @@
 {
-    "plugins": [],
-    "recurseDepth": 10,
-    "source": {
-        "include": [ "./src" ],
-        "includePattern": ".+\\.js(doc|x)?$"
-    },
-    "sourceType": "module",
-    "tags": {
-        "allowUnknownTags": true,
-        "dictionaries": ["jsdoc","closure"]
-    },
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false
-    }
+  "plugins": ["node_modules/clean-jsdoc-theme"],
+  "recurseDepth": 10,
+"source": {
+  "include": ["./src", "./README.md"],
+  "includePattern": ".+\\.js(doc|x)?$"
+},
+  "sourceType": "module",
+  "tags": {
+    "allowUnknownTags": true,
+    "dictionaries": ["jsdoc", "closure"]
+  },
+  "templates": {
+    "cleverLinks": false,
+    "monospaceLinks": false
+  },
+"opts": {
+  "encoding": "utf8",
+  "destination": "./doc/",
+  "recurse": true,
+  "template": "node_modules/clean-jsdoc-theme"
+},
+  "clean-jsdoc-theme": {
+    "default_theme": "dark",           
+    "title": "Documentación del Proyecto",
+    "favicon": "https://cdn-icons-png.flaticon.com/512/25/25231.png", 
+    "menu": [
+      {
+        "title": "Inicio",
+        "link": "index.html"
+      },
+      {
+        "title": "GitHub",
+        "link": "https://github.com/U1JJulian"
+      }
+    ],
+    "footer": "Hecho con  npm install clean-jsdoc-theme --save-dev  y JSDoc",
+    "includeFilesList": true,
+    "static_dir": "./assets",             
+    "search": true                       
+  }
 }
