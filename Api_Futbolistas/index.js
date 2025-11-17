@@ -1,18 +1,33 @@
-import express from 'express'
-import R_futbolista from './rutas/futbolista.js'
-import errorHandler from './middleware/errorHandler.js' //importación
+// index.js
+import express from "express";
+import cors from "cors";
+import morgan from "morgan";
+import dotenv from "dotenv";
+import R_auth from "./rutas/auth.js";
+import R_futbolista from "./rutas/futbolista.js";
+import errorHandler from "./middleware/errorHandler.js";
+import { swaggerDocs } from "./config/swagger.js";
 
-//Definimos express y el puerto
-const app = express()
-const PORT = 3000
+dotenv.config();
 
-//Rutas
-app.use('/futbolista', R_futbolista)
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-//Manejador de errores
-app.use(errorHandler)
+app.use(cors());
+app.use(morgan("dev"));
+app.use(express.json());
+
+// Rutas
+app.use("/auth", R_auth);
+app.use("/futbolistas", R_futbolista);
+
+// Swagger
+swaggerDocs(app);
+
+// Manejador de errores (al final)
+app.use(errorHandler);
 
 // Servidor
 app.listen(PORT, () => {
-  console.log(`server listening on port http://localhost:${PORT}`)
-})
+  console.log(`✅ Server: http://localhost:${PORT}`);
+});
