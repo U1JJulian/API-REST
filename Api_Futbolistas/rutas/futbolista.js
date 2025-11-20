@@ -18,6 +18,22 @@ import { verificarToken } from "../middleware/auth.js";
  *     tags:
  *       - futbolistas
  *     summary: Obtener todos los futbolistas
+ *     x-codeSamples:
+ *       - lang: JavaScript
+ *         label: Fetch Example
+ *         source: |
+ *           fetch("http://localhost:3000/futbolistas")
+ *             .then(r => r.json())
+ *             .then(console.log);
+
+ *       - lang: Python
+ *         label: Python Requests
+ *         source: |
+ *           import requests
+ *           r = requests.get("http://localhost:3000/futbolistas")
+ *           print(r.json())
+
+ *
  *     responses:
  *       200:
  *         description: Lista de futbolistas obtenida correctamente.
@@ -37,6 +53,21 @@ router.get("/", obtenerFutbolista);
  *     tags:
  *       - futbolistas
  *     summary: Obtener un futbolista por ID
+ *     x-codeSamples:
+ *       - lang: JavaScript
+ *         label: Axios Example
+ *         source: |
+ *           axios.get("http://localhost:3000/futbolistas/1")
+ *                .then(r => console.log(r.data))
+
+ *       - lang: Python
+ *         label: Python Requests
+ *         source: |
+ *           import requests
+ *           r = requests.get("http://localhost:3000/futbolistas/1")
+ *           print(r.json())
+
+ *
  *     parameters:
  *       - in: path
  *         name: id
@@ -44,6 +75,7 @@ router.get("/", obtenerFutbolista);
  *           type: integer
  *         required: true
  *         description: ID del futbolista
+ *
  *     responses:
  *       200:
  *         description: Futbolista encontrado
@@ -88,15 +120,60 @@ router.get("/:id", obtenerFutbolistaPorId);
  *     summary: Crear un nuevo futbolista (requiere token JWT)
  *     security:
  *       - bearerAuth: []
+ *
+ *     x-codeSamples:
+ *       - lang: JavaScript
+ *         label: Fetch Example
+ *         source: |
+ *           fetch("http://localhost:3000/futbolistas", {
+ *             method: "POST",
+ *             headers: {
+ *               "Content-Type": "application/json",
+ *               "Authorization": "Bearer TU_TOKEN_AQUI"
+ *             },
+ *             body: JSON.stringify({
+ *               name: "Kylian Mbappé",
+ *               nationality: "Francia",
+ *               position: "Delantero",
+ *               age: 26
+ *             })
+ *           })
+ *           .then(res => res.json())
+ *           .then(console.log);
+
+ *       - lang: Python
+ *         label: Python Requests
+ *         source: |
+ *           import requests
+
+ *           headers = {
+ *             "Authorization": "Bearer TU_TOKEN_AQUI",
+ *             "Content-Type": "application/json",
+ *           }
+
+ *           data = {
+ *             "name": "Kylian Mbappé",
+ *             "nationality": "Francia",
+ *             "position": "Delantero",
+ *             "age": 26
+ *           }
+
+ *           r = requests.post("http://localhost:3000/futbolistas",
+ *                             json=data, headers=headers)
+ *           print(r.json())
+
+ *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/FutbolistaCreate'
+ *
  *     responses:
  *       201:
  *         description: Futbolista creado correctamente.
+ *
  *       400:
  *         description: Error en los datos enviados
  *         content:
@@ -118,6 +195,7 @@ router.get("/:id", obtenerFutbolistaPorId);
  *                 summary: Edad negativa o no válida
  *                 value:
  *                   error: "La edad debe ser un número entero mayor a 0"
+ *
  *       401:
  *         description: Token no enviado o inválido
  *         content:
@@ -131,6 +209,7 @@ router.get("/:id", obtenerFutbolistaPorId);
  *                 summary: Token incorrecto
  *                 value:
  *                   error: "Token inválido"
+ *
  *       500:
  *         description: Error en el servidor.
  *         content:

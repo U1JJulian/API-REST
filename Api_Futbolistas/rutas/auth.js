@@ -62,12 +62,41 @@ import { register, login } from "../controller/authController.js";
  *     tags:
  *       - auth
  *     summary: Registrar nuevo usuario
+ *     x-codeSamples:
+ *       - lang: JavaScript
+ *         label: Fetch Example
+ *         source: |
+ *           fetch("http://localhost:3000/auth/register", {
+ *             method: "POST",
+ *             headers: { "Content-Type": "application/json" },
+ *             body: JSON.stringify({
+ *               username: "juan123",
+ *               password: "secreto123"
+ *             })
+ *           })
+ *           .then(r => r.json())
+ *           .then(console.log);
+
+ *       - lang: Python
+ *         label: Python Requests
+ *         source: |
+ *           import requests
+ *
+ *           data = {"username": "juan123", "password": "secreto123"}
+ *
+ *           r = requests.post("http://localhost:3000/auth/register",
+ *                              json=data)
+ *
+ *           print(r.json())
+
+ *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/AuthRegister'
+ *
  *     responses:
  *       201:
  *         description: Usuario creado
@@ -80,8 +109,9 @@ import { register, login } from "../controller/authController.js";
  *                   type: integer
  *                 username:
  *                   type: string
+ *
  *       400:
- *         description: Error de validación o usuario ya existente  
+ *         description: Error de validación o usuario ya existente
  *         content:
  *           application/json:
  *             schema:
@@ -95,6 +125,7 @@ import { register, login } from "../controller/authController.js";
  *                 summary: Usuario duplicado
  *                 value:
  *                   error: "Usuario ya existe"
+ *
  *       500:
  *         description: Error interno del servidor
  *         content:
@@ -111,12 +142,41 @@ router.post("/register", register);
  *     tags:
  *       - auth
  *     summary: Iniciar sesión y obtener token JWT (RS256)
+ *     x-codeSamples:
+ *       - lang: JavaScript
+ *         label: Fetch Example
+ *         source: |
+ *           fetch("http://localhost:3000/auth/login", {
+ *             method: "POST",
+ *             headers: { "Content-Type": "application/json" },
+ *             body: JSON.stringify({
+ *               username: "juan123",
+ *               password: "secreto123"
+ *             })
+ *           })
+ *           .then(r => r.json())
+ *           .then(console.log);
+
+ *       - lang: Python
+ *         label: Python Requests
+ *         source: |
+ *           import requests
+ *
+ *           data = {"username": "juan123", "password": "secreto123"}
+ *
+ *           r = requests.post("http://localhost:3000/auth/login",
+ *                              json=data)
+ *
+ *           print(r.json())
+
+ *
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/AuthLogin'
+ *
  *     responses:
  *       200:
  *         description: Token devuelto
@@ -124,22 +184,25 @@ router.post("/register", register);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/AuthToken'
+ *
  *       400:
- *         description: Faltan campos requeridos  
+ *         description: Falta username o password
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
  *               error: "Username y password son requeridos"
+ *
  *       401:
- *         description: Credenciales incorrectas  
+ *         description: Credenciales incorrectas
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  *             example:
  *               error: "Credenciales incorrectas"
+ *
  *       500:
  *         description: Error interno del servidor
  *         content:
